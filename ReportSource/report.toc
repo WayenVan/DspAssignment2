@@ -1,0 +1,11 @@
+\babel@toc {english}{}
+\contentsline {section}{\numberline {1}Task1}{2}%
+\contentsline {subsection}{\numberline {1.1}}{2}%
+\contentsline {subsection}{\numberline {1.2}}{2}%
+\contentsline {section}{\numberline {2}Task2}{5}%
+\contentsline {subsection}{\numberline {2.1}}{5}%
+\contentsline {subsection}{\numberline {2.2}}{7}%
+\contentsline {section}{\numberline {3}Appendix}{12}%
+\contentsline {subsection}{\numberline {3.1}hr-detect.py}{12}%
+\contentsline {subsection}{\numberline {3.2}ecg-filter.py}{16}%
+\contentsline {subsection}{\numberline {3.3}fir-filter.py}{18}%

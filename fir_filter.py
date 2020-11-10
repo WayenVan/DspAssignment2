@@ -14,7 +14,7 @@ class FIR_filter:
         self._ntaps = len(_coefficcients)
         self._coefficcients = _coefficcients
         self._buffer = np.zeros(self._ntaps)
-        self._offset = 0
+        self._offset = 0 #the current place of x(n)
               
     def dofilter(self, v):
         """dofilter for this """
@@ -28,6 +28,7 @@ class FIR_filter:
                 indexX += self._ntaps     
             output +=self._coefficcients[indexH]*self._buffer[indexX]
         
+        #when reach the end, turn the offset into the first position
         self._offset+=1
         if self._offset >= self._ntaps:
             self._offset =self._offset - self._ntaps

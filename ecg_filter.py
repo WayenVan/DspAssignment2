@@ -47,36 +47,72 @@ h[0:int(M/2)] = htemp[int(M/2):M]
 h[int(M/2):M] = htemp[0:int(M/2)]
 h = h*np.hamming(M)
 
-#feed values into filter
+#feed values into filter in real time
 fir_filter = fir.FIR_filter(h)
 ecgDataFiltered = np.empty(0)
 for value in ecgData:
     ecgDataFiltered = np.append(ecgDataFiltered, fir_filter.dofilter(value))
 
-
 """plot figures"""
+frequencySeriesH = generateXf(Fs, M)
 plt.figure(figsize=(20,10))
-plt.plot(generateXt(Fs, N), ecgData)
+plt.subplot(2,1,1)
+plt.title("filter coefficients")
+plt.plot(h)
+plt.xlabel("n")
+plt.ylabel("amplitude")
+
+plt.subplot(2,1,2)
+plt.title("frequency spectrum of filter coefficients")
+plt.plot(frequencySeriesH[0:M//2], 2/M*np.abs(np.fft.fft(h)[0:M//2]))
+plt.xlabel("frequency(Hz)")
+plt.ylabel("ampitude")
+#plt.savefig("./Figures/filterCoefficients.pdf")
+
+frequencySeries=generateXf(Fs, N)
+
+plt.figure(figsize=(20,10))
+plt.subplot(2,1,1)
+plt.plot(frequencySeries[0:N//2], 2/N*np.abs(np.fft.fft(ecgData)[0:N//2]))
+plt.xlabel("frequency(Hz)")
+plt.ylabel("amplitude")
+plt.title("original signal spectrum")
+plt.yscale("log")
+
+plt.subplot(2,1,2)
+plt.plot(frequencySeries[0:N//2], 2/N*np.abs(np.fft.fft(ecgDataFiltered)[0:N//2]))
+plt.xlabel("frequency(Hz)")
+plt.ylabel("amplitude")
+plt.yscale("log")
+plt.title("filtered signal spectrum")
+plt.ylim(1e-10, 1e-2)
+plt.savefig("./Figures/ecgDataFrequency.pdf")
+
+timeSeries=generateXt(Fs, N)
+
+plt.figure(figsize=(20,10))
+plt.subplot(2, 1, 1)
+plt.plot(timeSeries, ecgData)
 plt.title("original signal")
 plt.xlabel("time(s)")
 plt.ylabel("amplitude")
-plt.savefig("./Figures/ecgDataOriginal.pdf")
 
-# plt.figure(figsize=(20,10))
-# plt.plot(generateXf(Fs, M),H)
-# plt.xlabel("frequency(Hz)")
-# plt.ylabel("amplitude")
-# plt.savefig("./Figures/H.pdf")
-
-# plt.figure(figsize=(20,10))
-# plt.plot(h)
-# plt.xlabel("n")
-# plt.ylabel("amplitude")
-# plt.savefig("./Figures/h.pdf")
-
-plt.figure(figsize=(20,10))
-plt.plot(generateXt(Fs, N), ecgDataFiltered)
-plt.title("filtered signal")
+plt.subplot(2, 1, 2)
+plt.plot(timeSeries, ecgDataFiltered)
+plt.title("filtered signal")    
 plt.xlabel("time(s)")
 plt.ylabel("amplitude")
-plt.savefig("./Figures/ecgDataFiltered.pdf")
+#plt.savefig("./Figures/ecgDataTime.pdf")
+
+plt.figure(figsize=(20,10))
+plt.plot(timeSeries[400:600], ecgDataFiltered[400:600])
+plt.title("PQRST intact")
+plt.xlabel("time(s)")
+plt.ylabel("amplitude")
+#plt.savefig("./Figures/PQRST.pdf")
+
+#plot filter coeficients
+
+
+
+plt.show()
