@@ -63,7 +63,7 @@
 \subsection{}
 With the defination of FIR filter:
 $$
-x(n) = \sum_{i=0}^{ntaps}h(i)x(n-i)
+z(n) = \sum_{i=0}^{ntaps}h(i)x(n-i)
 $$
 We implemented the FIR filter with buffer defined with:
 \begin{lstlisting}[language=Python]
@@ -81,25 +81,57 @@ self._offset+=1
 if self._offset >= self._ntaps:
 		self._offset =self._offset - self._ntaps
 \end{lstlisting}
+By moving the offset(index) of current $x(n)$rather than full array, we minimised the amount of data being shifted and limited the time complexity in $O(n)$
 
 \subsection{}
-To test this FIR filter class, we defined the delay line, the foefficients and the expected output as:
+To test this FIR filter class, we defined a delay line, a foefficients for calculate. By implementing the equation mentioned above, we could manully calculate the expected output:
+\begin{center}
+\begin{tabular}{ccc}
+\hline
+x& h& output\\
+\hline
+4&5&20\\
+\hline
+5&2&33\\
+\hline
+3& &25\\
+\hline
+\end{tabular}
+\end{center}
+So, In code, we defined:
 \begin{lstlisting}[language=Python]
 x = np.array([4,5,3])
 h = np.array([5,2])
 
 output_correct = np.array([20, 33, 25])
 \end{lstlisting}
-Once start testting, one should get the output by feeding x values into fir-filter:
+Once starting the test, one should get the output by feeding x values into fir-filter:
 \begin{lstlisting}[language=Python]
 for value in x:
 		print("fir result:", fir_filter.dofilter(value)) 
 \end{lstlisting}
-We created a filter template by:
+So we could check test the filter by: \lstinline|python fir_filter| and the correct result should be:
+\begin{lstlisting}[language=Python]
+starting unittest
+x value: [4 5 3]
+h value [5 2]
+correct output [20 33 25]
+output from FIR_filter.dofilter: [20. 33. 25.]
+\end{lstlisting}
+
+\subsection{}
+To determined the cut-off frequency, we firstly observed the frequency spectrum of original signal (as shwon by \ref{fig_ecgFrequency}): 
+\begin{figure}[H]   
+	\centering 
+	\includegraphics[width=12cm]{../Figures/ecgDataFrequency_refine.pdf} 
+	\caption{ECG data in frequency domain}   
+	\label{fig_ecgFrequency}
+\end{figure}
+As shwon by \ref{fig_ecgFrequency}, the DC value is about 0-5HZ and the fundemental frequency  is concentrated on around 50Hz. Thus, we created a filter template by:
 \begin{lstlisting}[language=Python]
 H = np.ones(M)
 \end{lstlisting}
-Than,  removing the 0~5Hz component and 45~55Hz component:
+Than,  removing the 0-5Hz component and 45-55Hz component:
 \begin{lstlisting}[language=Python]
 k0 = int(5/Fs * M)
 k1 = int(45/Fs * M)
@@ -122,9 +154,9 @@ h[int(M/2):M] = htemp[0:int(M/2)]
 h = h*np.hamming(M)
 \end{lstlisting}
 The frequency response as well as time response of this filter coefficients are shown in figure\ref{fig_H}:
-\begin{figure}[h]   
+\begin{figure}[H]   
 	\centering 
-	\includegraphics[width=12cm]{../Figures/filterCoefficients.pdf} 
+	\includegraphics[width=12cm]{../Figures/filterCoefficients_refine.pdf} 
 	\caption{filter coefficients}   
 	\label{fig_H}
 \end{figure}
@@ -142,13 +174,6 @@ The difference betweent the original siganl and the filtered siganl could be obs
 	\includegraphics[width=12cm]{../Figures/ecgDataTime.pdf} 
 	\caption{ECG data in time domain}   
 	\label{fig_ecgTime}
-\end{figure}
-In frequency domain(as shwon by \ref{fig_ecgFrequency}: 
-\begin{figure}[H]   
-	\centering 
-	\includegraphics[width=12cm]{../Figures/ecgDataFrequency.pdf} 
-	\caption{ECG data in frequency domain}   
-	\label{fig_ecgFrequency}
 \end{figure}
 The PQRST is intact and can be clearly found in figure :
 \begin{figure}[H]   
@@ -207,6 +232,18 @@ And the result of match filter is shown by figure\ref{fig_matchResult}:
 	\caption{the match filter result and the found peaks} 
 	\label{fig_matchResult}
 \end{figure}
+In command line:
+\begin{lstlisting}[language=Python]
+	peakFinding in 2.1: [ 181.  182.  183.  184.  185.  186.  187.  188.  189.  190.  191.  197.
+	198.  199.  200.  201.  202.  203.  204.  205.  206.  207.  210.  211.
+	212.  213.  214.  215.  216.  217.  222.  223.  224.  225.  226.  227.
+	228.  229.  230.  231.  353.  354.  355.  562.  563.  564.  777.  778.
+	779. 1011. 1012. 1234. 1235. 1435. 1436. 1633. 1634. 1635. 1900. 1901.
+	1902. 2197. 2198. 2497. 2498. 2499. 2789. 2790. 2791. 3082. 3083. 3349.
+	3350. 3351. 3632. 3633. 3634. 3911. 3912. 3913. 4190. 4191. 4421. 4422.
+	4651. 4652. 4653. 4896. 4897. 4898.]
+\end{lstlisting}
+
 \subsection{}
 Heart rate can be calculated by the time gap between every heart beat (R-peak). Specifically:
 \begin{lstlisting}[language=Python]
@@ -415,7 +452,21 @@ in 118.36 s: 84.0 Bpm
 in 119.11 s: 79.0 Bpm
 in 119.89 s: 76.0 Bpm
 \end{lstlisting}
+Besides, adding the capability of processing Python command line arguments provides a user-friendly interface. Thus we add an "-c" or "--clear" argument  to make the output less verbose. After passing the argument by:
+\begin{lstlisting}
+python hr_detect.py -c/--clear
+\end{lstlisting}
+the output would only be a grapph of heart rate and time.
 
+\clearpage
+
+\section{Declaration of Originality and Submission Information}
+I affirm that this submission is my own / the groups original work in accordance with the University of Glasgow Regulations and the School of Engineering Requirements.
+
+\begin{itemize}
+	\item Student Number: 2533494w\space Student Name: Jingyan Wang
+	\item Student Number: 2595993w\space Student Name: Qianqian Wang
+\end{itemize}
 \clearpage
 
 \section{Appendix}

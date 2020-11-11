@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.14159265-2.6-0.999992 (TeX Live 2020) (preloaded format=xelatex 2020.10.11)  10 NOV 2020 00:23
+This is XeTeX, Version 3.14159265-2.6-0.999992 (TeX Live 2020) (preloaded format=xelatex 2020.10.11)  11 NOV 2020 02:31
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -296,35 +296,38 @@ LaTeX Font Info:    External font `cmex10' loaded for size
 File: lstlang1.sty 2020/03/24 1.8d listings language file
 )
 [2]
-File: ../Figures/filterCoefficients.pdf Graphic file (type pdf)
-<use ../Figures/filterCoefficients.pdf>
+File: ../Figures/ecgDataFrequency_refine.pdf Graphic file (type pdf)
+<use ../Figures/ecgDataFrequency_refine.pdf>
+ [3]
+File: ../Figures/filterCoefficients_refine.pdf Graphic file (type pdf)
+<use ../Figures/filterCoefficients_refine.pdf>
 File: ../Figures/ecgDataTime.pdf Graphic file (type pdf)
 <use ../Figures/ecgDataTime.pdf>
- [3]
-File: ../Figures/ecgDataFrequency.pdf Graphic file (type pdf)
-<use ../Figures/ecgDataFrequency.pdf>
+ [4]
 File: ../Figures/PQRST.pdf Graphic file (type pdf)
 <use ../Figures/PQRST.pdf>
- [4]
 File: ../Figures/matchCore.pdf Graphic file (type pdf)
 <use ../Figures/matchCore.pdf>
- [5]
+ [5] [6]
 File: ../Figures/matchResult.pdf Graphic file (type pdf)
 <use ../Figures/matchResult.pdf>
- [6] [7]
+ [7]
 File: ../Figures/heartRate.pdf Graphic file (type pdf)
 <use ../Figures/heartRate.pdf>
- [8] [9] [10] [11] (../hr_detect.py [12
+ [8] [9] [10] [11] [12] [13
 
-] [13] [14])
-[15] (../ecg_filter.py [16] [17]) (../fir_filter.py [18]) [19] (./report.aux) )
- 
+] (../hr_detect.py [14
+
+]
+[15] [16] [17]) (../ecg_filter.py [18] [19]) (../fir_filter.py [20] [21])
+[22] (./report.aux) ) 
 Here is how much of TeX's memory you used:
- 6250 strings out of 479418
- 146845 string characters out of 5884584
- 782412 words of memory out of 5000000
- 23697 multiletter control sequences out of 15000+600000
+ 6268 strings out of 479418
+ 147118 string characters out of 5884584
+ 779412 words of memory out of 5000000
+ 23715 multiletter control sequences out of 15000+600000
  536195 words of font info for 62 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
- 44i,7n,70p,305b,1616s stack positions out of 5000i,500n,10000p,200000b,80000s
-Output written on report.pdf (19 pages).
+ 44i,7n,70p,305b,1644s stack positions out of 5000i,500n,10000p,200000b,80000s
+
+Output written on report.pdf (22 pages).

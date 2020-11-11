@@ -9,7 +9,11 @@ Created on Wed Nov  4 18:23:05 2020
 import numpy as np
 import matplotlib.pyplot as plt
 import fir_filter as fir
+import sys
+import getopt
+
 from ecg_gudb_database import GUDb
+
 
 def heartRateCalculate(peaks, FS):
     """this function calculate the heart rate when we get peak sequencies, just for  verifying"""
@@ -25,6 +29,7 @@ def heartRateDetect(data, preFilter: fir.FIR_filter, matchedFilter: fir.FIR_filt
     """detect heart rate in by filters
     
     """
+    global verbose 
     Fs = 250
     threshold = 2e-11
     Nlimited = 100
@@ -60,7 +65,10 @@ def heartRateDetect(data, preFilter: fir.FIR_filter, matchedFilter: fir.FIR_filt
                 heartRate =60//(N*(1/Fs))
                 #calculate the time when beat occur
                 time = index[0]*(1/Fs)
-                print("in",round(time, 2),"s:", heartRate, "Bpm")
+                
+                if(verbose):
+                    print("in",round(time, 2),"s:", heartRate, "Bpm")
+                    
                 heartRateResult = np.append(heartRateResult, heartRate)
                 R_peakPoint = np.append(R_peakPoint, index[0])
                 
@@ -73,6 +81,19 @@ def heartRateDetect(data, preFilter: fir.FIR_filter, matchedFilter: fir.FIR_filt
             R_peakPoint)
         
 """2.1 create a matched filter"""
+
+#check command line argues
+verbose = True
+
+if __name__=='__main__':
+    try:
+        options, args = getopt.getopt(sys.argv[1:], "c", ["clear"])
+    except getopt.GetoptError:
+        sys.exit()
+    
+    for name,value in options:
+        if name in ('-c', "--clear"):
+            verbose = False
 
 #pre filtering
 ecgData = np.genfromtxt('ECG_msc_matric_4.dat',
@@ -170,9 +191,11 @@ tresult = heartRateCalculate(ecg_class.anno_cs, 250)
 # plt.ylim(0.0e-10, 1.5e-11)
 # plt.savefig("./Figures/matchResult.pdf")
 
-# plt.figure(figsize=(20,10))
-# plt.plot(result[3]*1/250, result[2])
-# plt.title("detected heart rate")
-# plt.ylabel("heart rate(BPM)")
-# plt.xlabel("time(s)")
-# plt.savefig("./Figures/heartRate.pdf")
+if(verbose==False):
+    plt.figure(figsize=(20,10))
+    plt.plot(result[3]*1/250, result[2])
+    plt.title("detected heart rate")
+    plt.ylabel("heart rate(BPM)")
+    plt.xlabel("time(s)")
+    #plt.savefig("./Figures/heartRate.pdf")
+    plt.show()

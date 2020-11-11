@@ -62,9 +62,12 @@ plt.plot(h)
 plt.xlabel("n")
 plt.ylabel("amplitude")
 
+H2 = 2/M*np.abs(np.fft.fft(h))
 plt.subplot(2,1,2)
 plt.title("frequency spectrum of filter coefficients")
-plt.plot(frequencySeriesH[0:M//2], 2/M*np.abs(np.fft.fft(h)[0:M//2]))
+plt.plot(frequencySeriesH[0:M//2], H2[0:M//2])
+
+#draw points
 plt.xlabel("frequency(Hz)")
 plt.ylabel("ampitude")
 #plt.savefig("./Figures/filterCoefficients.pdf")
@@ -72,21 +75,12 @@ plt.ylabel("ampitude")
 frequencySeries=generateXf(Fs, N)
 
 plt.figure(figsize=(20,10))
-plt.subplot(2,1,1)
 plt.plot(frequencySeries[0:N//2], 2/N*np.abs(np.fft.fft(ecgData)[0:N//2]))
 plt.xlabel("frequency(Hz)")
 plt.ylabel("amplitude")
 plt.title("original signal spectrum")
 plt.yscale("log")
-
-plt.subplot(2,1,2)
-plt.plot(frequencySeries[0:N//2], 2/N*np.abs(np.fft.fft(ecgDataFiltered)[0:N//2]))
-plt.xlabel("frequency(Hz)")
-plt.ylabel("amplitude")
-plt.yscale("log")
-plt.title("filtered signal spectrum")
-plt.ylim(1e-10, 1e-2)
-plt.savefig("./Figures/ecgDataFrequency.pdf")
+#plt.savefig("./Figures/ecgDataFrequency.pdf")
 
 timeSeries=generateXt(Fs, N)
 

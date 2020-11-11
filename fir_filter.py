@@ -40,6 +40,8 @@ def unittest():
     h = np.array([5,2])
     output_correct = np.array([20, 33, 25])
     
+    output = np.empty(0)
+    
     fir_filter = FIR_filter(h)
     
     print("starting unittest")
@@ -47,7 +49,9 @@ def unittest():
     print("h value", h)
     print("correct output", output_correct)
     for value in x:
-        print("fir result:", fir_filter.dofilter(value))        
+        output=np.append(output, fir_filter.dofilter(value)) 
+    
+    print("output from FIR_filter.dofilter:", output)
    
 if __name__=="__main__":
     unittest()
